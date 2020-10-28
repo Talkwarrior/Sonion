@@ -79,6 +79,7 @@ QGroupBox* SettingsWidget::createForm()
 	
 	this->monitorRadio = new QRadioButton("Monitor", this->mainWidget);
 	this->plotterRadio = new QRadioButton("Plotter", this->mainWidget);
+	this->monitorRadio->setChecked(true);
 	// init widgets
 	this->updatePortInfoBox();
 	this->baudRateBox->addItem(QStringLiteral("9600"), QSerialPort::Baud9600);
@@ -152,6 +153,12 @@ SettingsWidget::SerialSettings SettingsWidget::getSetting()
 	set.stringFlowControl = this->flowControlBox->currentText();
 
 	set.localEchoEnabled = this->localEchoCheckBox->isChecked();
+
+	if (this->monitorRadio->isChecked()) {
+		set.displayType = "Monitor";
+	} else if (this->plotterRadio->isChecked()) {
+		set.displayType = "Plotter";
+	}
 	return set;
 }
 

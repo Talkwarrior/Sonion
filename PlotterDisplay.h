@@ -1,7 +1,9 @@
 #pragma once
 #include "AbstractDisplay.h"
-#include <QtCharts/qchartglobal.h>
+#include <QtCharts\qsplineseries.h>
+#include <QtCharts/qchartview.h>
 
+class Sonion;
 class PlotterDisplay : public AbstractDisplay
 {
 public:
@@ -12,8 +14,12 @@ public slots:
     void update(const QByteArray& data) override;
 
 private:
-    Q_OBJECT;
-    QScriptLine* series;
+    Q_OBJECT
+
+    QtCharts::QChartView* chartView;
+    QtCharts::QChart* chart;
+    quint64 clock = 0;
+    QtCharts::QSplineSeries* series;
 
     void initLayout();
 };

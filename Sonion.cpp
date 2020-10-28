@@ -1,5 +1,6 @@
 #include "Sonion.h"
 #include "MonitorDisplay.h"
+#include "PlotterDisplay.h"
 
 #include <qdockwidget.h>
 #include <QDialog>
@@ -63,7 +64,17 @@ void Sonion::openDisplay(SettingsWidget::SerialSettings s)
     port = this->openPort(port);
     if (port == NULL) { return; }
 
-	MonitorDisplay* dock = new MonitorDisplay(this, new QSerialPortInfo(*port));
+    AbstractDisplay* dock = nullptr;
+    if (s.displayType.toStdString() == "Monitor") {
+	    dock = new MonitorDisplay(this, new QSerialPortInfo(*port));
+    }
+    else if (s.displayType.toStdString() == "Plotter") {
+        dock = new PlotterDisplay(this, new QSerialPortInfo(*port));
+    }
+    else {
+        QMessageBox::critical(this, "Error", "Undefined Display" + s.displayType);
+        exit(0);
+    }
 	dock->setAllowedAreas(Qt::AllDockWidgetAreas);
 	this->addDockWidget(Qt::RightDockWidgetArea, dock);
     this->displays << dock;
@@ -72,6 +83,7 @@ void Sonion::openDisplay(SettingsWidget::SerialSettings s)
 
 void Sonion::unsubscribe(AbstractDisplay* display)
 {
+    // TODO: 구현하기
     // this->displays.removeAll(display);
     // this->subscribe
 }
@@ -94,6 +106,4 @@ void Sonion::updateDisplay()
             }
         }
     }
-    //const QByteArray data = m_serial->readAll();
-    //m_console->putData(data);
 }

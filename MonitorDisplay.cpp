@@ -34,7 +34,10 @@ void MonitorDisplay::initLayout()
 
 void MonitorDisplay::update(const QByteArray &data)
 {
-	this->monitorWidget->append(data);
+	if (data.isEmpty() || data.startsWith('\n')) { return; }
+	this->monitorWidget->moveCursor(QTextCursor::End);
+	this->monitorWidget->insertPlainText(data);
+	this->monitorWidget->moveCursor(QTextCursor::End);
 	QScrollBar* bar = this->monitorWidget->verticalScrollBar();
 	bar->setValue(bar->maximum());
 }
