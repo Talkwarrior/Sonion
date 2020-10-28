@@ -20,7 +20,5 @@ private:
     QTextBrowser* monitorWidget;
     QLineEdit* inputLine;
     QPushButton* submitButton;
-
-    void initLayout();
 };
 

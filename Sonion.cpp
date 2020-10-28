@@ -2,6 +2,7 @@
 #include "MonitorDisplay.h"
 #include "PlotterDisplay.h"
 
+#include <memory>
 #include <qdockwidget.h>
 #include <QDialog>
 #include <qwindow.h>
@@ -51,6 +52,19 @@ QSerialPort* Sonion::openPort(QSerialPort* port)
     }
 }
 
+// close port, remove from ports & subscribe
+void Sonion::closePort(QString portName)
+{
+    auto port = ports.begin();
+    for ( ; port != ports.end(); port = port + 1) 
+    {
+        if ((*port)->portName() == portName) { break; }
+    }
+    (*port)->close();
+    this->ports.removeAll(*port);
+    this->subscribeInfo.remove((*port)->portName());
+}
+
 void Sonion::openDisplay(SettingsWidget::SerialSettings s)
 {
     QSerialPort* port = new QSerialPort(this);
@@ -78,14 +92,23 @@ void Sonion::openDisplay(SettingsWidget::SerialSettings s)
 	dock->setAllowedAreas(Qt::AllDockWidgetAreas);
 	this->addDockWidget(Qt::RightDockWidgetArea, dock);
     this->displays << dock;
-    this->subscribe.insert(port, dock);
+    this->subscribeInfo.insert(port->portName(), dock);
 }
 
 void Sonion::unsubscribe(AbstractDisplay* display)
 {
-    // TODO: 구현하기
-    // this->displays.removeAll(display);
-    // this->subscribe
+    QString portName = display->portname;
+    this->displays.removeAll(display);
+    for (AbstractDisplay* subscriber : this->subscribeInfo.values(portName))
+    {
+        if (display == subscriber) {
+            this->subscribeInfo.remove(portName, subscriber);
+            if (this->subscribeInfo.count(portName) == 0) {
+                this->closePort(portName);
+            }
+            break;
+        }
+    }
 }
 
 void Sonion::portError(QSerialPort::SerialPortError error)
@@ -100,7 +123,7 @@ void Sonion::updateDisplay()
         if (port->isReadable()) 
         {
             const QByteArray data = port->readAll();
-            for (AbstractDisplay * display : this->subscribe.values(port))
+            for (AbstractDisplay * display : this->subscribeInfo.values(port->portName()))
             {
                 display->update(data);
             }

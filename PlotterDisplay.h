@@ -1,6 +1,6 @@
 #pragma once
 #include "AbstractDisplay.h"
-#include <QtCharts\qsplineseries.h>
+#include <QtCharts\qlineseries.h>
 #include <QtCharts/qchartview.h>
 
 class Sonion;
@@ -18,8 +18,8 @@ private:
 
     QtCharts::QChartView* chartView;
     QtCharts::QChart* chart;
+    double minY = 0;
+    double maxY = 10;
     quint64 clock = 0;
-    QtCharts::QSplineSeries* series;
-
-    void initLayout();
+    QtCharts::QLineSeries* series;
 };

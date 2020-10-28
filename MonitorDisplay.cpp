@@ -6,23 +6,13 @@
 MonitorDisplay::MonitorDisplay(QWidget* parent, QSerialPortInfo* info): AbstractDisplay(parent, info)
 {
 	this->setWindowTitle(info->portName().append(" Monitor"));
-	this->initLayout();
-}
-
-MonitorDisplay::~MonitorDisplay()
-{
-	//this->MainWindow
-}
-
-void MonitorDisplay::initLayout()
-{
 	this->setMinimumSize(300, 200);
 	QWidget* main = new QWidget(this);
 	QGridLayout* gl = new QGridLayout(main);
-	
+
 	this->monitorWidget = new QTextBrowser(main);
 	this->inputLine = new QLineEdit(main);
-	this->submitButton = new QPushButton("Enter",main);
+	this->submitButton = new QPushButton("Enter", main);
 
 	gl->addWidget(this->inputLine, 0, 0, 1, 4);
 	gl->addWidget(this->submitButton, 0, 4, 1, 1);
@@ -30,6 +20,11 @@ void MonitorDisplay::initLayout()
 
 	main->setLayout(gl);
 	this->setWidget(main);
+}
+
+MonitorDisplay::~MonitorDisplay()
+{
+	//this->MainWindow
 }
 
 void MonitorDisplay::update(const QByteArray &data)

@@ -14,6 +14,7 @@ AbstractDisplay::AbstractDisplay(QWidget* parent, QSerialPortInfo* info)
 		exit(0);
 	}
 	this->info = *info;
+	this->portname = info->portName();
 }
 
 AbstractDisplay::~AbstractDisplay()

@@ -22,10 +22,11 @@ private:
     Q_OBJECT
     QList<QSerialPort*> ports;
     QList<AbstractDisplay*> displays;
-    QMultiMap<QSerialPort*, AbstractDisplay*> subscribe;
+    QMultiMap<QString, AbstractDisplay*> subscribeInfo;
 
     SettingsWidget* setting;
 
     void initLayout();
     QSerialPort* openPort(QSerialPort* port);
+    void closePort(QString portName);
 };
