@@ -13,6 +13,7 @@ public:
 
     void openDisplay(SettingsWidget::SerialSettings s);
     void unsubscribe(AbstractDisplay* display);
+    void writeData(QString portName, const QByteArray& data);
 
 private slots:
     void updateDisplay();

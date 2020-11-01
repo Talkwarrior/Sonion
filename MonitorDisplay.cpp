@@ -1,7 +1,11 @@
 #include "MonitorDisplay.h"
+#include "Sonion.h"
+
+#include <qkeysequence.h>
 #include <qgridlayout.h>
 #include <QScrollbar>
-#include <QDebug>
+#include <qshortcut.h>
+#include <QtWidgets\qmessagebox.h>
 
 MonitorDisplay::MonitorDisplay(QWidget* parent, QSerialPortInfo* info): AbstractDisplay(parent, info)
 {
@@ -20,11 +24,24 @@ MonitorDisplay::MonitorDisplay(QWidget* parent, QSerialPortInfo* info): Abstract
 
 	main->setLayout(gl);
 	this->setWidget(main);
+	
+	QShortcut* shortcutEnter = new QShortcut(QKeySequence(Qt::Key_Enter), this);
+	QShortcut* shortcutReturn = new QShortcut(QKeySequence(Qt::Key_Return), this);
+	connect(shortcutEnter, &QShortcut::activated, this, &MonitorDisplay::submit);
+	connect(shortcutReturn, &QShortcut::activated, this, &MonitorDisplay::submit);
+	connect(this->submitButton, &QPushButton::clicked, this, &MonitorDisplay::submit);
 }
 
 MonitorDisplay::~MonitorDisplay()
 {
-	//this->MainWindow
+	this->MainWindow->unsubscribe(this);
+}
+
+void MonitorDisplay::submit()
+{
+	QByteArray b = this->inputLine->text().toLocal8Bit();
+	this->MainWindow->writeData(this->portname, b);
+	this->inputLine->clear();
 }
 
 void MonitorDisplay::update(const QByteArray &data)

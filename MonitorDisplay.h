@@ -13,9 +13,9 @@ public:
 
 public slots:
     void update(const QByteArray &data) override;
-
+    void submit();
 private:
-    Q_OBJECT;
+    Q_OBJECT
 
     QTextBrowser* monitorWidget;
     QLineEdit* inputLine;

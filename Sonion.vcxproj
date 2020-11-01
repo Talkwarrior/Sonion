@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractDisplay.cpp" />
+    <ClCompile Include="fit_generator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MonitorDisplay.cpp" />
     <ClCompile Include="PlotterDisplay.cpp" />
@@ -110,6 +111,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="PlotterDisplay.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fit_generator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -1,5 +1,8 @@
 #include "PlotterDisplay.h"
 #include "Sonion.h"
+#include "fit_generator.h"
+
+#include <fstream>
 #include <QtCharts/qchart.h>
 #include <QtCharts/qchartview.h>
 #include <qlayout.h>
@@ -7,8 +10,12 @@
 
 PlotterDisplay::PlotterDisplay(QWidget* parent, QSerialPortInfo* info) : AbstractDisplay(parent, info)
 {
+	this->saveButton = new QPushButton(this);
+	this->saveButton->setText("Save");
+	connect(this->saveButton, &QPushButton::clicked, this, &PlotterDisplay::save);
+
 	this->setWindowTitle(info->portName().append(" Plotter"));
-	this->setMinimumSize(300, 200);
+	this->setMinimumSize(600, 400);
 	QWidget* mainWidget = new QWidget(this);
 	QVBoxLayout* layout = new QVBoxLayout(mainWidget);
 	this->chartView = new QtCharts::QChartView(this);
@@ -22,6 +29,7 @@ PlotterDisplay::PlotterDisplay(QWidget* parent, QSerialPortInfo* info) : Abstrac
 
 	this->chartView->setRenderHint(QPainter::Antialiasing);
 	layout->addWidget(this->chartView);
+	layout->addWidget(this->saveButton);
 
 	mainWidget->setLayout(layout);
 
@@ -31,6 +39,21 @@ PlotterDisplay::PlotterDisplay(QWidget* parent, QSerialPortInfo* info) : Abstrac
 PlotterDisplay::~PlotterDisplay()
 {
 	this->MainWindow->unsubscribe(this);
+}
+
+void PlotterDisplay::save()
+{
+	auto points = this->series->points();
+	std::ofstream out;
+	out.open("time_points.txt");
+	for (const QPointF& point : points) {
+		out << point.x() << "\t" << point.y() << "\n";
+	}
+	out.close();
+
+	out.open("time_funcs.txt");
+	fit_generator(points.mid(1, -1), out);
+	out.close();
 }
 
 void PlotterDisplay::update(const QByteArray& data)

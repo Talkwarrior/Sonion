@@ -61,6 +61,7 @@ void Sonion::closePort(QString portName)
         if ((*port)->portName() == portName) { break; }
     }
     (*port)->close();
+    QMessageBox::information(this, "Close Port", "Successfully closed " + portName);
     this->ports.removeAll(*port);
     this->subscribeInfo.remove((*port)->portName());
 }
@@ -106,6 +107,16 @@ void Sonion::unsubscribe(AbstractDisplay* display)
             if (this->subscribeInfo.count(portName) == 0) {
                 this->closePort(portName);
             }
+            break;
+        }
+    }
+}
+
+void Sonion::writeData(QString portName, const QByteArray& data)
+{
+    for (QSerialPort* port : this->ports) {
+        if (port->portName() == portName) {
+            port->write(data);
             break;
         }
     }

@@ -1,5 +1,6 @@
 #pragma once
 #include "AbstractDisplay.h"
+#include "qpushbutton.h"
 #include <QtCharts\qlineseries.h>
 #include <QtCharts/qchartview.h>
 
@@ -12,10 +13,11 @@ public:
 
 public slots:
     void update(const QByteArray& data) override;
-
+    void save();
 private:
     Q_OBJECT
 
+    QPushButton* saveButton;
     QtCharts::QChartView* chartView;
     QtCharts::QChart* chart;
     double minY = 0;

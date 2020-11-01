@@ -40,6 +40,9 @@
     <Filter Include="Header Files\Display\PlotterDisplay">
       <UniqueIdentifier>{c60b78ff-cd34-4366-8c75-3117f6810238}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\fit_generator">
+      <UniqueIdentifier>{0e3248ef-dc8d-48a2-8a11-21a2bdeb779d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Sonion.qrc">
@@ -68,6 +71,9 @@
     <ClCompile Include="PlotterDisplay.cpp">
       <Filter>Header Files\Display\PlotterDisplay</Filter>
     </ClCompile>
+    <ClCompile Include="fit_generator.cpp">
+      <Filter>Header Files\fit_generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AbstractDisplay.h">
@@ -85,5 +91,10 @@
     <QtMoc Include="PlotterDisplay.h">
       <Filter>Header Files\Display\PlotterDisplay</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fit_generator.h">
+      <Filter>Header Files\fit_generator</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
